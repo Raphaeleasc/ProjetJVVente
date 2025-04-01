@@ -1,6 +1,8 @@
 
 import java.awt.Choice;
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -77,52 +79,83 @@ class ProduitB extends Produit{
 
 
 // Gestion ajout item
-    class GestionajoutItem{
+    class GestionajoutItem implements  ItemListener{
+        private JPanel panelAItem = new JPanel();
+        private JPanel panelAItemBas = new JPanel();
+        private JPanel choixPanel = new JPanel();
+        private JPanel PanelAItemMain = new JPanel();
+        private Choice qualProduitChoice = new Choice();
+        private JTextField remiseTextField = new JTextField();
+        private JLabel remiseJLabel = new JLabel("Taux Remise");
+        private JLabel qualiteLabel = new JLabel("Qualite");
+        private int change = 0;
         public void afficheDemandeItem(){
-            JPanel panelAItem = new JPanel(); // Panel haut 
+             // Panel haut 
             GridLayout gridAtiem = new  GridLayout(4,2);
-            panelAItem.setLayout(gridAtiem);
+            this.panelAItem.setLayout(gridAtiem);
             JLabel[] labels = new JLabel[4];
             String[] nomlabel = {"Nom","Ville","Prix","quantité"};
             JTextField[] textfield1 = new JTextField[4];
             for(int x=0;x<nomlabel.length;x++){
                 labels[x] = new JLabel(nomlabel[x]);
                 textfield1[x] = new JTextField();
-                panelAItem.add(labels[x]);
-                panelAItem.add(textfield1[x]);
+                this.panelAItem.add(labels[x]);
+                this.panelAItem.add(textfield1[x]);
             }
             //Panel bas
-            JPanel panelAItemBas = new JPanel();
-            GridLayout gridAtiemBas = new  GridLayout(1,2);
-            panelAItemBas.setLayout(gridAtiemBas);
+            GridLayout gridAtiemBas = new  GridLayout(1,2,6,6);
+            this.panelAItemBas.setLayout(gridAtiemBas);
             JButton[] buttons = new JButton[2];
             buttons[0] = new JButton("Valider");
             buttons[1] = new JButton("Annuler");
-            panelAItemBas.add(buttons[0]);
-            panelAItemBas.add(buttons[1]);
+            this.panelAItemBas.add(buttons[0]);
+            this.panelAItemBas.add(buttons[1]);
             
             //Panneau choixType
-            JPanel choixPanel = new JPanel();
-            GridLayout choixGridLayout = new GridLayout(1,2);
-            choixPanel.setLayout(choixGridLayout);
+            GridLayout choixGridLayout = new GridLayout(0,2,6,6);
+            this.choixPanel.setLayout(choixGridLayout);
             JLabel choixJLabel = new JLabel("Type de produit");
             Choice produitChoice = new Choice();
             produitChoice.add("Artisanal");
             produitChoice.add("Industriel");
-            choixPanel.add(choixJLabel);
-            choixPanel.add(produitChoice);
-            
+            this.choixPanel.add(choixJLabel);
+            this.choixPanel.add(produitChoice);
+            produitChoice.addItemListener(this);
+            this.qualProduitChoice.add("Basse qualite");
+            this.qualProduitChoice.add("Haute qualité");
             // Panneau Principal
-            JPanel PanelAItemMain = new JPanel();
-            GridLayout GridAItemMain = new GridLayout(3,1);
-            PanelAItemMain.setLayout(GridAItemMain);
-            PanelAItemMain.add(panelAItem);
-            PanelAItemMain.add(choixPanel);
-            PanelAItemMain.add(panelAItemBas);
+            GridLayout GridAItemMain = new GridLayout(2,1);
+            this.PanelAItemMain.setLayout(GridAItemMain);
+            JPanel AItem1JPanel = new JPanel();
+            AItem1JPanel.setLayout(GridAItemMain);
+            this.PanelAItemMain.add(this.panelAItem);
+            AItem1JPanel.add(this.choixPanel);
+            AItem1JPanel.add(this.panelAItemBas);
+            this.PanelAItemMain.add(AItem1JPanel);
             JFrame frameAitem = new JFrame();
-            frameAitem.add(PanelAItemMain);
+            frameAitem.add(this.PanelAItemMain);
             frameAitem.setSize(200,200);
             frameAitem.setVisible(true);
+        }
+        public void itemStateChanged(ItemEvent item){
+            Object obj = item.getItem();
+            String selection = (String)obj;
+            System.out.println("choix : "+selection);
+            if (this.change == 1){
+                this.choixPanel.remove(2);
+                this.choixPanel.remove(2);
+            }
+            if(selection.equals("Artisanal")){
+                this.choixPanel.add(this.qualiteLabel);
+                this.choixPanel.add(this.qualProduitChoice);
+            }
+            else if(selection.equals("Industriel")){
+                this.choixPanel.add(this.remiseJLabel);
+                this.choixPanel.add(this.remiseTextField);                
+            }
+            this.PanelAItemMain.revalidate();
+            this.PanelAItemMain.repaint();
+            this.change=1;
         }
     }
 //Gestion affichage item
