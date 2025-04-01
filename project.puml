@@ -1,0 +1,28 @@
+@startuml
+class Gestionproduit{
+    +main(Strings[] argv) : void
+}
+class Produit{
+    +String nom
+    +String ville de provenance
+    +int Prix unitaire
+    +int quantité
+    +calculprix() : float
+}
+class ProduitA extends Produit{
+    +String qualité
+}
+class ProduitB extends Produit{
+    +int Tauxréduction
+    +calculprixindustriel() : float
+}
+class Client{
+    -String Nom
+    -String Prénom
+    -int âge
+    -String Ville
+}
+Gestionproduit->Produit
+Gestionproduit->Client
+
+@enduml
